@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from './service/api.service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,8 @@ export class AppComponent {
   Idd: number = 0;
   ban: boolean = true;
 
+  data:any[]=[];
+
   items = [
     { id: 1, name: 'pablo 1', favorite: true, imageUrl: 'path/to/image1.jpg' },
     { id: 2, name: 'picaso 2', favorite: false, imageUrl: 'path/to/image2.jpg' },
@@ -20,7 +23,17 @@ export class AppComponent {
     // Añade más ítems según sea necesario
   ];
 
-  constructor() { }
+  constructor(private apiservice: ApiService) { }
+
+  ngOnInit():void{
+    this.llenarData();
+  }
+  llenarData(){
+    this.apiservice.getdata().subscribe(data =>{
+      this.data = data;
+      console.log("data",this.data);
+    })
+  }
 
   onAddClick(): void {
     console.log('Card clicked!');
