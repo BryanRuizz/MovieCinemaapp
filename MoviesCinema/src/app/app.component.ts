@@ -26,7 +26,7 @@ export class AppComponent {
     console.log('Card clicked!');
   }
   card(id: number) {
-    console.log("puto", id, this.Idd, this.ban);
+    console.log("look", id, this.Idd, this.ban);
     if (id === this.Idd) {
       this.Idd = 0;
     } else {
