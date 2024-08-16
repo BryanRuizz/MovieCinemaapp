@@ -34,5 +34,11 @@ export class AppComponent {
     }
   }
 
+  deleteitem(id:number){
+    console.log("deleted item",id );
+  }
+
+  
+
 
 }
