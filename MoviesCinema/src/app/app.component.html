@@ -9,15 +9,20 @@
 <div class="content" role="main">
 
   <div class="container">
-    <div class="card" *ngFor="let item of items" (click)="card(item.id)">
+
+    <div class="card" *ngFor="let item of items" (click)="card(item.id)"
+      [ngClass]="{ 'card-content': ban,'selected': item.id === Idd}">
       <div class="card-image">
         <img [src]="item.imageUrl" alt="Image">
       </div>
       <div class="card-content">
-        <p class="card-id">ID: {{ item.id }}</p>
+        <p class="card-id">ID: {{ item.id+ " "+Idd+" "+ban }}</p>
         <p class="card-name">{{ item.name }}</p>
         <p class="card-favorite">Favorite: {{ item.favorite ? 'Yes' : 'No' }}</p>
       </div>
+
+
+
     </div>
 
     <div class="card">
@@ -30,7 +35,18 @@
 
 
 
-
+  <div *ngIf="Idd !== 0" class="footer">
+    <div class="footer-button left-btn">
+      <button class="btn">
+        <i class="fas fa-trash"></i> Delete
+      </button>
+    </div>
+    <div class="footer-button right-btn">
+      <button class="btn">
+        <i class="fas fa-edit"></i> Update
+      </button>
+    </div>
+  </div>
 
 
 </div>
