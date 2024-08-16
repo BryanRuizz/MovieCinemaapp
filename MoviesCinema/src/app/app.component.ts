@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from './service/api.service';
 
 @Component({
@@ -6,40 +6,36 @@ import { ApiService } from './service/api.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'MoviesCinema';
-
+export class AppComponent implements OnInit {
+  title = 'TVshows';
   Idd: number = 0;
   ban: boolean = true;
-
-  data:any[]=[];
-
-  items = [
-    { id: 1, name: 'pablo 1', favorite: true, imageUrl: 'path/to/image1.jpg' },
-    { id: 2, name: 'picaso 2', favorite: false, imageUrl: 'path/to/image2.jpg' },
-    { id: 3, name: 'yuya 1', favorite: true, imageUrl: 'path/to/image1.jpg' },
-    { id: 4, name: 'yei 2', favorite: false, imageUrl: 'path/to/image2.jpg' },
-
-    // Añade más ítems según sea necesario
-  ];
+  modalupdate = false;
+  modalcreate = false;
+  data: any[] = [];
+  filteredData: any[] = [];
+  currentItem: any = { id: 0, name: '', favorite: false };
+  searchTerm: string = ''; 
 
   constructor(private apiservice: ApiService) { }
 
-  ngOnInit():void{
-    this.llenarData();
+  ngOnInit(): void {
+    this.getdata();
   }
-  llenarData(){
-    this.apiservice.getdata().subscribe(data =>{
+
+  getdata() {
+    this.apiservice.getdata().subscribe(data => {
       this.data = data;
-      console.log("data",this.data);
-    })
+      this.filteredData = data; 
+      this.filterItems(); 
+    });
   }
 
   onAddClick(): void {
     console.log('Card clicked!');
   }
+
   card(id: number) {
-    console.log("look", id, this.Idd, this.ban);
     if (id === this.Idd) {
       this.Idd = 0;
     } else {
@@ -47,11 +43,63 @@ export class AppComponent {
     }
   }
 
-  deleteitem(id:number){
-    console.log("deleted item",id );
+  deleteitem(id: number) {
+    this.apiservice.deleteData(id).subscribe(response => {
+      console.log("Item deleted successfully", response);
+      this.getdata(); 
+    }, error => {
+      console.error("Error deleting item", error);
+    });
   }
 
-  
+  updateview(listen: boolean) {
+    this.currentItem = this.data.filter((inf) => inf.id === this.Idd);
+    console.log(this.currentItem);
+    this.modalupdate = listen;
 
+  }
 
+  createtvshow(listen: boolean) {
+    this.modalcreate = listen;
+  }
+
+  handlecreate(item: any) {
+    this.apiservice.createData(item).subscribe(response => {
+      console.log("Item created successfully", response);
+      this.getdata(); 
+    }, error => {
+      console.error("Error creating item", error);
+    });
+    this.modalcreate = false; 
+  }
+
+  handleupdate(item: any) {
+    this.apiservice.updateData(this.Idd, item[0]).subscribe(response => {
+      console.log("Item updated successfully", response);
+
+      this.getdata();
+    }, error => {
+      console.error("Error updating item", error);
+    });
+    this.modalcreate = false; 
+    this.getdata();
+  }
+
+  updatecancel() {
+    this.modalupdate = false;
+  }
+
+  createcancel() {
+    this.modalcreate = false;
+  }
+
+  filterItems() {
+    if (this.searchTerm) {
+      this.filteredData = this.data.filter(item =>
+        item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredData = this.data; 
+    }
+  }
 }

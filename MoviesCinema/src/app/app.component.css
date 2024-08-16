@@ -96,19 +96,21 @@ html, body {
 .card-content {
   display: flex;
   flex-direction: column;
-  padding: 8px 16px;
+  padding: 8px 5px;
   flex: 1;
 }
 
 .card-id {
+  align-self: center;
   font-size: 1rem;
-  font-weight: bold;
+  /* font-weight: bold; */
   margin-bottom: 4px;
 }
 
 .card-name {
   font-size: 1rem;
   margin-bottom: 4px;
+  /* background-color: #007bff; */
 }
 
 .card-favorite {

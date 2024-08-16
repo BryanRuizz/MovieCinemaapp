@@ -2,6 +2,18 @@ using TvShowApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 // Add services to the container.
 builder.Services.AddSingleton<TVShowService>();//here
 
@@ -12,7 +24,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -20,6 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
 

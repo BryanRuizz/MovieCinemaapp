@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
 
-  private urlApi = 'https://rickandmortyapi.com/api/character/1,183';
+  private urlApi = 'https://localhost:44303/api/TVShow';
   constructor(private http: HttpClient) { }
 
   public getdata(): Observable<any> {
@@ -19,13 +19,11 @@ export class ApiService {
     return this.http.put<any>(url, data);
   }
 
-  // Eliminar un recurso específico
   public deleteData(id: number): Observable<any> {
     const url = `${this.urlApi}/${id}`;
     return this.http.delete<any>(url);
   }
 
-  // Crear un nuevo recurso (si aplica)
   public createData(data: any): Observable<any> {
     return this.http.post<any>(this.urlApi, data);
   }
